@@ -13,18 +13,18 @@ const updatePrice = price => {
 }
 
 const loadPrice = () => {
+	let secondsTillUpdate = 10;
 	$.get('/price', response => {
 		if (response.success) {
 			const price = (Math.round(response.price * 100) / 100).toFixed(2);
 			if (!isNaN(price) && price > 0) {
-				updatePrice(price)
-				return window.setTimeout(loadPrice, response.updateIn * 1000);
-			}
-		}
-		showError(response.status === 429 ? 'API error' : 'Server error');
-		window.setTimeout(loadPrice, 5 * 1000);
+				secondsTillUpdate = response.updateIn;
+				updatePrice(price);
+			} else showError('Server error');
+		} else showError('API error');
 	})
 	.fail(() => showError(`Can't connect to server`))
+	.done(() => window.setTimeout(loadPrice, secondsTillUpdate * 1000))
 };
 
 loadPrice()

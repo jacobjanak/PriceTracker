@@ -1,14 +1,18 @@
 require('dotenv').config()
 
+// imports
 const express = require('express');
 const axios = require('axios');
 
+// globals
 let nextRequestTime = 0;
 let lastPrice = 0;
 
+// server
 const app = express();
 app.use(express.static('public'))
 
+// utils
 const currentTime = () => Math.floor(new Date().getTime() / 1000);
 
 const nextMonthStartTime = () => {
@@ -31,22 +35,21 @@ const updateRateLimit = requestsLeft => {
   }
 };
 
-const sendError = (res, status) => {
-  res.json({ success: false, status: status })
-};
-
 const sendPrice = (res, price) => {
   res.json({
     success: true,
     price: price,
-    updateIn: nextRequestTime - currentTime() + math.random()
+    updateIn: nextRequestTime - currentTime() + Math.random()
   })
 };
 
+// routes
 app.get('/', (req, res) => res.sendFile('index.html'))
 
 app.get('/price', (req, res) => {
-  if (currentTime() >= nextRequestTime) {
+  if (currentTime() < nextRequestTime) {
+    sendPrice(res, lastPrice)
+  } else {
     axios.get('https://api.coinranking.com/v2/coin/Qwsogvtv82FCd/price', {
       params: { 'x-access-token:': process.env.API_KEY }
     })
@@ -56,13 +59,9 @@ app.get('/price', (req, res) => {
       lastPrice = price;
       sendPrice(res, price)
     })
-    .catch(error => {
-      const status = error.response.status === 429 ? 429 : 500;
-      sendError(res, status)
-    })
-  } else {
-    sendPrice(res, price)
+    .catch(error => res.json({ success: false }))
   }
 })
 
-app.listen(3000)
+// start
+app.listen(process.env.PORT || 3000)
