@@ -43,6 +43,16 @@ const sendPrice = (res, price) => {
   })
 };
 
+// redirect to https
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res, next) => {
+    if (req.headers['x-forwarded-proto'] != 'https') {
+      res.redirect('https://btcpricenow.com' + req.url)
+    }
+    else next();
+  })
+}
+
 // routes
 app.get('/', (req, res) => res.sendFile('index.html'))
 
