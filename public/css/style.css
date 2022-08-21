@@ -3,7 +3,19 @@ body {
 	background-color: #2C3333;
 }
 
-#main {
+.hide {
+	display: none !important;
+}
+
+.alert {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	border-radius: 0;
+}
+
+#price-container {
 	height: 80vh;
 	color: #E7F6F2;
 }
