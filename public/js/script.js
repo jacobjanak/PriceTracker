@@ -11,7 +11,7 @@ const loadPrice = () => {
 		if (response.success) {
 			const price = (Math.round(response.price * 100) / 100).toFixed(2);
 			if (!isNaN(price) && price > 0) {
-				document.title = price;
+				document.title = price + ' BTC/USD';
 				$('#price-display').text(price)
 				hideError()
 			} else {
