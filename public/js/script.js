@@ -6,27 +6,27 @@ const showError = errorMessage => {
 
 const hideError = () => $('.alert').addClass('hide');
 
+const updatePrice = price => {
+	hideError()
+	document.title = price + ' BTC/USD';
+	$('#price-display').text(price)
+}
+
 const loadPrice = () => {
 	$.get('/price', response => {
 		if (response.success) {
 			const price = (Math.round(response.price * 100) / 100).toFixed(2);
 			if (!isNaN(price) && price > 0) {
-				document.title = price + ' BTC/USD';
-				$('#price-display').text(price)
-				hideError()
-			} else {
-				showError('Server error')
+				updatePrice(price)
+				return window.setTimeout(loadPrice, response.updateIn * 1000);
 			}
-		} else {
-			if (response.status === 429) showError('API error')
-			else showError('Server error')
 		}
+		showError(response.status === 429 ? 'API error' : 'Server error');
+		window.setTimeout(loadPrice, 5 * 1000);
 	})
 	.fail(() => showError(`Can't connect to server`))
-}
+};
 
 loadPrice()
-
-window.setInterval(loadPrice, 5000)
 
 $('.btn-close').on('click', () => hideError())

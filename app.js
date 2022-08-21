@@ -18,18 +18,29 @@ const nextMonthStartTime = () => {
   date.setHours(0);
   date.setMinutes(0);
   date.setSeconds(0);
-  date.setMilliseconds(0);
   return Math.floor(date.getTime() / 1000);
 };
 
 const updateRateLimit = requestsLeft => {
-  if (requestsLeft === 0) {
-    nextRequestTime = nextMonthStartTime();
-  } else {
+  if (requestsLeft > 0) {
     const secondsLeft = nextMonthStartTime() - currentTime();
     const rate = Math.ceil(secondsLeft / requestsLeft);
     nextRequestTime = currentTime() + rate;
+  } else {
+    nextRequestTime = nextMonthStartTime();
   }
+};
+
+const sendError = (res, status) => {
+  res.json({ success: false, status: status })
+};
+
+const sendPrice = (res, price) => {
+  res.json({
+    success: true,
+    price: price,
+    updateIn: nextRequestTime - currentTime() + math.random()
+  })
 };
 
 app.get('/', (req, res) => res.sendFile('index.html'))
@@ -43,14 +54,14 @@ app.get('/price', (req, res) => {
       updateRateLimit(response.headers['x-ratelimit-remaining-month']);
       const price = response.data.data.price;
       lastPrice = price;
-      res.json({ success: true, price: price })
+      sendPrice(res, price)
     })
     .catch(error => {
       const status = error.response.status === 429 ? 429 : 500;
-      res.json({ success: false, status: status })
+      sendError(res, status)
     })
   } else {
-    res.json({ success: true, price: lastPrice })
+    sendPrice(res, price)
   }
 })
 
