@@ -1,12 +1,18 @@
 
+let disableAlert = false;
+
 const showError = errorMessage => {
-	$('#error-message').text(errorMessage)
-	$('.alert').removeClass('hide')
+	if (!disableAlert) {
+		disableAlert = true;
+		$('#error-message').text(errorMessage)
+		$('.alert').removeClass('hide')
+	}
 }
 
 const hideError = () => $('.alert').addClass('hide');
 
 const updatePrice = price => {
+	disableAlert = false;
 	hideError()
 	document.title = price + ' BTC/USD';
 	$('#price-display').text(price)

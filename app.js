@@ -45,11 +45,10 @@ const sendPrice = (res, price) => {
 
 // redirect to https
 if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res, next) => {
-    if (req.headers['x-forwarded-proto'] != 'https') {
-      res.redirect('https://btcpricenow.com' + req.url)
-    }
-    else next();
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    } else next();
   })
 }
 
