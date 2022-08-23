@@ -7,16 +7,18 @@ const showError = errorMessage => {
 		$('#error-message').text(errorMessage)
 		$('.alert').removeClass('hide')
 	}
-}
+};
 
 const hideError = () => $('.alert').addClass('hide');
 
 const updatePrice = price => {
 	disableAlert = false;
 	hideError()
-	document.title = price + ' BTC/USD';
+	$('#price-label').addClass('text-start')
+	$('#price-asset').addClass('text-end')
 	$('#price-display').text(price)
-}
+	document.title = price + ' BTC/USD';
+};
 
 const loadPrice = () => {
 	let secondsTillUpdate = 10;
