@@ -3,10 +3,12 @@ const DEFAULT_TITLE = 'Bitcoin Price Tracker';
 const DEFAULT_PRICE = '--.--';
 
 let alertDisabled = false;
+let lastUpdateTime = null;
 
 const showError = errorMessage => {
 	if (!alertDisabled) {
 		alertDisabled = true;
+		$('footer').addClass('d-none')
 		$('#price-label').removeClass('text-start')
 		$('#price-asset').removeClass('text-end')
 		$('#price-display').text(DEFAULT_PRICE)
@@ -21,6 +23,8 @@ const updatePrice = price => {
 	$('#price-asset').addClass('text-end')
 	$('#price-display').text(price)
 	document.title = price + ' BTC/USD';
+	$('footer').removeClass('d-none')
+	lastUpdateTime = currentTime();
 };
 
 const loadPrice = () => {
@@ -38,4 +42,18 @@ const loadPrice = () => {
 	.done(() => window.setTimeout(loadPrice, secondsTillUpdate * 1000))
 };
 
+const currentTime = () => Math.floor(new Date().getTime() / 1000);
+
+const displayLastUpdated = () => {
+	let nextUpdate = alertDisabled ? 2000 : 200;
+	if (lastUpdateTime) {
+		const now = currentTime();
+		nextUpdate = now * 1000 - new Date().getTime();
+		$('#last-update').text(`Updated ${now - lastUpdateTime} seconds ago`)
+	}
+	window.setTimeout(displayLastUpdated, nextUpdate)
+}
+
+// script
 loadPrice()
+displayLastUpdated()
