@@ -10,12 +10,10 @@ const showError = errorMessage => {
 		$('#price-label').removeClass('text-start')
 		$('#price-asset').removeClass('text-end')
 		$('#price-display').text(DEFAULT_PRICE)
-		document.title = price + ' BTC/USD';
+		document.title = DEFAULT_TITLE;
 		alert(errorMessage)
 	}
 };
-
-const hideError = () => $('.alert').addClass('hide');
 
 const updatePrice = price => {
 	alertDisabled = false;

@@ -7,6 +7,7 @@
 /* psuedo Bootstrap classes */
 .d-flex { display: flex; }
 .justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
 .align-items-center { align-items: center; }
 .text-start { text-align: left; }
 .text-center { text-align: center; }
@@ -26,4 +27,13 @@ body {
 
 #main-content {
 	height: 80vh;
+}
+
+.red-dot {
+	border: 1px solid red;
+	border-radius: 50%;
+	background-color: red;
+  height: 8px;
+  width: 8px;
+  margin-right: 4px;
 }
