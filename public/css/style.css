@@ -1,8 +1,13 @@
-/* color scheme */
+/* scheme */
 .color-1 { color: #E7F6F2 }
 .color-2 { color: #A5C9CA }
 .color-3 { color: #395B64 }
 .color-4 { color: #2C3333 }
+.size-1 { font-size: 72px; }
+.size-2 { font-size: 36px; }
+.size-3 { font-size: 24px; }
+.size-4 { font-size: 18px; }
+.size-5 { font-size: 12px; }
 
 /* psuedo Bootstrap classes */
 .d-flex { display: flex; }
@@ -16,6 +21,7 @@
 body {
 	min-height: 100vh;
 	background-color: #2C3333;
+	font-family: 'Courier New', monospace;
 }
 
 #navbar {
@@ -23,10 +29,20 @@ body {
 	top: 24px;
 	left: 5%;
 	right: 5%;
+	font-weight: bold;
+	letter-spacing: .1em;
 }
 
 #main-content {
 	height: 80vh;
+}
+
+#logo {
+	height: 32px;
+}
+
+#brand {
+	margin-left: 16px;
 }
 
 .red-dot {
@@ -35,5 +51,9 @@ body {
 	background-color: red;
   height: 8px;
   width: 8px;
-  margin-right: 4px;
+  margin-right: 6px;
+}
+
+#price-asset.text-end {
+	padding-right: 7px;
 }
