@@ -1,21 +1,29 @@
+/* color scheme */
+.color-1 { color: #E7F6F2 }
+.color-2 { color: #A5C9CA }
+.color-3 { color: #395B64 }
+.color-4 { color: #2C3333 }
+
+/* psuedo Bootstrap classes */
+.d-flex { display: flex; }
+.justify-content-center { justify-content: center; }
+.align-items-center { align-items: center; }
+.text-start { text-align: left; }
+.text-center { text-align: center; }
+.text-end { text-align: right; }
+
 body {
 	min-height: 100vh;
 	background-color: #2C3333;
 }
 
-.hide {
-	display: none !important;
-}
-
-.alert {
+#navbar {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	border-radius: 0;
+	top: 24px;
+	left: 5%;
+	right: 5%;
 }
 
-#price-container {
+#main-content {
 	height: 80vh;
-	color: #E7F6F2;
 }

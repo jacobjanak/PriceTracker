@@ -8,37 +8,23 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png">
 	<link rel="manifest" href="./favicon_io/site.webmanifest">
 	<title>Bitcoin Price Tracker</title>
-	<link rel="stylesheet" href="./css/bootstrap.min.css" />
 	<link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
 
-	<svg class="d-none" xmlns="http://www.w3.org/2000/svg">
-	  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-	    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-	  </symbol>
-	</svg>
+	<nav id="navbar" class="color-2">
+		<h4>btcpricenow.com</h4>
+	</nav>
 
-	<div class="hide alert alert-danger alert-dismissible d-flex align-items-center" role="alert">
-	  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-	  	<use xlink:href="#exclamation-triangle-fill" />
-	  </svg>
-	  <div id="error-message">Error</div>
-	  <button type="button" class="btn-close" aria-label="Close"></button>
-	</div>
-
-	<div id="price-container" class="d-flex flex-column justify-content-center">
-		<div class="d-flex justify-content-center">
+	<div id="main-content" class="d-flex justify-content-center align-items-center">
 			<div class="text-center">
-				<h4 id="price-label">current price</h4>
-				<h1 id="price-display" class="display-1">--.--</h1>
-				<h3 id="price-asset">BTC/USD</h3>
+				<!-- <h4 id="price-label">current price</h4> -->
+				<h1 id="price-display" class="color-1">--.--</h1>
+				<h3 id="price-asset" class="color-2">BTC/USD</h3>
 			</div>
-		</div>
 	</div>
 
 	<script src="./js/jquery.min.js"></script>
-	<script src="./js/bootstrap.min.js"></script>
 	<script src="./js/script.js"></script>
 </body>
 </html>

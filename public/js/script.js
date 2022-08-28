@@ -1,19 +1,24 @@
 
-let disableAlert = false;
+const DEFAULT_TITLE = 'Bitcoin Price Tracker';
+const DEFAULT_PRICE = '--.--';
+
+let alertDisabled = false;
 
 const showError = errorMessage => {
-	if (!disableAlert) {
-		disableAlert = true;
-		$('#error-message').text(errorMessage)
-		$('.alert').removeClass('hide')
+	if (!alertDisabled) {
+		alertDisabled = true;
+		$('#price-label').removeClass('text-start')
+		$('#price-asset').removeClass('text-end')
+		$('#price-display').text(DEFAULT_PRICE)
+		document.title = price + ' BTC/USD';
+		alert(errorMessage)
 	}
 };
 
 const hideError = () => $('.alert').addClass('hide');
 
 const updatePrice = price => {
-	disableAlert = false;
-	hideError()
+	alertDisabled = false;
 	$('#price-label').addClass('text-start')
 	$('#price-asset').addClass('text-end')
 	$('#price-display').text(price)
@@ -36,5 +41,3 @@ const loadPrice = () => {
 };
 
 loadPrice()
-
-$('.btn-close').on('click', () => hideError())
