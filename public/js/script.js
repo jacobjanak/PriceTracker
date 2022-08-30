@@ -2,15 +2,15 @@
 const DEFAULT_TITLE = 'Bitcoin Price Tracker';
 const DEFAULT_PRICE = '--.--';
 
+const currentTime = () => Math.floor(new Date().getTime() / 1000);
+
 let alertDisabled = false;
-let lastUpdateTime = null;
+let lastUpdateTime = currentTime();
 
 const showError = errorMessage => {
 	if (!alertDisabled) {
 		alertDisabled = true;
 		$('footer').addClass('d-none')
-		$('#price-label').removeClass('text-start')
-		$('#price-asset').removeClass('text-end')
 		$('#price-display').text(DEFAULT_PRICE)
 		document.title = DEFAULT_TITLE;
 		alert(errorMessage)
@@ -19,8 +19,6 @@ const showError = errorMessage => {
 
 const updatePrice = price => {
 	alertDisabled = false;
-	$('#price-label').addClass('text-start')
-	$('#price-asset').addClass('text-end')
 	$('#price-display').text(price)
 	document.title = price + ' BTC/USD';
 	$('footer').removeClass('d-none')
@@ -28,13 +26,12 @@ const updatePrice = price => {
 };
 
 const loadPrice = () => {
-	let secondsTillUpdate = 10;
+	let secondsTillUpdate = alertDisabled ? 10 : 1;
 	$.get('/price', response => {
 		if (response.success) {
-			const price = (Math.round(response.price * 100) / 100).toFixed(2);
-			if (!isNaN(price) && price > 0) {
+			if (response.price > 0) {
 				secondsTillUpdate = response.updateIn;
-				updatePrice(price);
+				updatePrice(response.price);
 			} else showError('Server error');
 		} else showError('API error');
 	})
@@ -42,18 +39,13 @@ const loadPrice = () => {
 	.done(() => window.setTimeout(loadPrice, secondsTillUpdate * 1000))
 };
 
-const currentTime = () => Math.floor(new Date().getTime() / 1000);
-
 const displayLastUpdated = () => {
-	let nextUpdate = alertDisabled ? 2000 : 200;
-	if (lastUpdateTime) {
-		const now = currentTime();
-		nextUpdate = now * 1000 - new Date().getTime();
-		$('#last-update').text(`Updated ${now - lastUpdateTime} seconds ago`)
-	}
+	const now = currentTime();
+	$('#last-update').text(`Updated ${now - lastUpdateTime} seconds ago`)
+	const nextUpdate = now * 1000 - new Date().getTime();
 	window.setTimeout(displayLastUpdated, nextUpdate)
 }
 
 // script
-loadPrice()
+window.setTimeout(loadPrice, updateIn * 1000)
 displayLastUpdated()

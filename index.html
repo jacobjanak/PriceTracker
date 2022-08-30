@@ -32,6 +32,8 @@
   <!-- CSS -->
 	<link rel="stylesheet" href="./css/reset.css" />
 	<link rel="stylesheet" href="./css/style.css" />
+
+	<script>window.updateIn = {{ updateIn }};</script>
 </head>
 <body>
 
@@ -47,14 +49,14 @@
 
 	<!-- Main -->
 	<div id="main-content" class="d-flex justify-content-center align-items-center">
-		<div class="text-center">
-			<span id="price-display" class="size-1 color-1">--.--</span>
-			<h1 id="price-asset" class="size-2 color-2">BTC/USD</h1>
+		<div>
+			<span id="price-display" class="size-1 color-1 text-center">{{ price }}</span>
+			<h1 id="price-asset" class="size-2 color-2 text-end">BTC/USD</h1>
 		</div>
 	</div>
 
 	<!-- Footer -->
-	<footer class="d-none">
+	<footer>
 		<div id="live-indicator" class="d-flex align-items-center">
 			<span class="red-dot"></span>
 			<span class="size-4 color-1"><b>Live</b></span>

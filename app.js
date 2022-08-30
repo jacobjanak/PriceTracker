@@ -1,12 +1,13 @@
 require('dotenv').config()
 
 // imports
+const fs = require('fs');
 const express = require('express');
 const axios = require('axios');
 
 // globals
 let nextRequestTime = 0;
-let lastPrice = 0;
+let lastPrice = '0.00';
 
 // server
 const app = express();
@@ -14,6 +15,8 @@ app.use(express.static('public'))
 
 // utils
 const currentTime = () => Math.floor(new Date().getTime() / 1000);
+const updateIn = () => (nextRequestTime - currentTime() + Math.random());
+const formatPrice = price => (Math.round(price * 100) / 100).toFixed(2);
 
 const nextMonthStartTime = () => {
   const date = new Date();
@@ -39,8 +42,21 @@ const sendPrice = (res, price) => {
   res.json({
     success: true,
     price: price,
-    updateIn: nextRequestTime - currentTime() + Math.random()
+    updateIn: updateIn(),
   })
+};
+
+const getPrice = cb => {
+  if (currentTime() < nextRequestTime) return cb();
+  axios.get('https://api.coinranking.com/v2/coin/Qwsogvtv82FCd/price', {
+    params: { 'x-access-token:': process.env.API_KEY }
+  })
+  .then(res => {
+    updateRateLimit(res.headers['x-ratelimit-remaining-month']);
+    lastPrice = formatPrice(res.data.data.price);
+    cb()
+  })
+  // .catch(error => res.json({ success: false }))
 };
 
 // redirect to https
@@ -53,23 +69,20 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // routes
-app.get('/', (req, res) => res.sendFile('index.html'))
-
 app.get('/price', (req, res) => {
-  if (currentTime() < nextRequestTime) {
-    sendPrice(res, lastPrice)
-  } else {
-    axios.get('https://api.coinranking.com/v2/coin/Qwsogvtv82FCd/price', {
-      params: { 'x-access-token:': process.env.API_KEY }
+  getPrice(() => sendPrice(res, lastPrice))
+})
+
+app.get('*', (req, res) => {
+  fs.readFile(__dirname + '/index.html', 'utf-8', (err, html) => {
+    if (err) return res.send(404);
+    getPrice(() => {
+      html = html.replace('{{ price }}', lastPrice);
+      html = html.replace('{{ updateIn }}', updateIn());
+      res.contentType('text/html')
+      res.send(html)
     })
-    .then(response => {
-      updateRateLimit(response.headers['x-ratelimit-remaining-month']);
-      const price = response.data.data.price;
-      lastPrice = price;
-      sendPrice(res, price)
-    })
-    .catch(error => res.json({ success: false }))
-  }
+  })
 })
 
 // start
